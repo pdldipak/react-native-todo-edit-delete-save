@@ -51,31 +51,31 @@ const App = () => {
     setCurrentTodo({ ...todo });
   };
 
-  const getData = async () => {
+  const storeData = async (value) => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@Dipak');
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (error) {
-      console.error('Failed to load .');
-    }
-  };
-
-  const storeData = async () => {
-    try {
-      const jsonValue = JSON.stringify(todos);
-      await AsyncStorage.setItem('@Dipak', jsonValue);
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@Dipak_todo', jsonValue);
     } catch (error) {
       console.error('Failed to save name.');
     }
   };
 
-  useEffect(() => {
-    storeData();
-  }, [todos]);
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@Dipak_todo');
+      return jsonValue != null ? setTodos(JSON.parse(jsonValue)) : null;
+    } catch (error) {
+      console.error('Failed to load .');
+    }
+  };
 
   useEffect(() => {
     getData();
   }, []);
+
+  useEffect(() => {
+    storeData(todos);
+  }, [todos]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
